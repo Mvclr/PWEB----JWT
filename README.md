@@ -1,5 +1,6 @@
 Projeto de autenticação e autorização utilizando JWT para autenticação básica de login e autorição de entrada nas páginas de adicionar clientes e na página principal. Tokens gerados com JWT e armazenados em cookies.
 
+Bibliotecas baixadas: express, nodemon, cookie-parser, jsonwebtoken e dotenv-safe
 
 Endpoints:
 
@@ -34,4 +35,5 @@ ao armazenado no cookies. Caso
 verdadeiro chame a tela html da
 página livros. Caso contrário retorne
 para a tela de login (rota login método
-get).# PWEB----JWT
+get)
+.# PWEB----JWT
