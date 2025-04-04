@@ -3,27 +3,14 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const path = require('path'); 
 const app = express();
-const secretKey = process.env.JWT_SECRET || 'MySecret'
+const {verifyJWT, secretKey} = require("./middlewares/auth");
+
 const cookieParser = require('cookie-parser')
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser())
 
-function verifyJWT(req, res, next) {
-    const token = req.cookies.token;
-    if (!token) {
-        return res.redirect('/login')
-    }
-    
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            return res.redirect('/login')
-        }
-        req.user = decoded;
-        next()
-    });
-}
 
 
 app.get('/login', (req, res) => {
@@ -53,10 +40,6 @@ app.get("/clientes", verifyJWT,(req, res) =>{
     res.sendFile(path.join(__dirname, 'views', 'clientes.html'))
 })
 // pra confirmar que o cookie ta sendo armazenado sem testes diretos do codigo, inspeciona a página no navegador e vai em aplicativo -> cookies -> localhost:3000 (ou qualquer que seja a porta se o senhor mudar aí), um teste que eu fiz aqui foi, ir lá e editar o valor do token porque ele permite, pra verificar se mudaria serverside, mas ta funcionando diretinho e ele ja redireciona pro /login
-
-
-
-
 
 
 const PORT = 3000;
