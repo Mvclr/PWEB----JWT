@@ -30,8 +30,8 @@ router.post("/login", async (req, res) => {
             return res.status(401).json({ message: "Senha incorreta" });
         }else{
         
-        const token = jwt.sign({ user: foundUser.user }, secretKey, { expiresIn: 300 });
-        res.cookie("token", token, { httpOnly: true, maxAge: 300000 });
+        const token = jwt.sign({ user: foundUser.user }, secretKey, { expiresIn: 30000 });
+        res.cookie("token", token, { httpOnly: true, maxAge: 30000000 });
         console.log("Token gerado: " + token);
         return res.sendFile(path.join(__dirname, "views", "principal.html"));
         }

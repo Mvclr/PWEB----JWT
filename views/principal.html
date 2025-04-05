@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tela Principal</title>
-    <link rel="stylesheet" href="principal.css">
+    <link rel="stylesheet" href="css/principal.css">
 </head>
 <body>
     <div class="sidebar">
@@ -19,8 +19,12 @@
         </ul>
     </div>
     <div class="main-dashboard">
-        <div class="card black">96<br>Clientes Ativos<br><button>Gerenciar Clientes</button></div>
-        <div class="card gray">0<br>Produtos Cadastrados<br><button>Gerenciar Produtos</button></div>
+        <form action="/clientes" method="get">
+            <div class="card black" >96<br>Clientes Ativos<br><button type="submit">Gerenciar Clientes</button></div>
+        </form>
+        <form action="/produtos"  method="get">
+            <div class="card gray">0<br>Produtos Cadastrados<br><button  type="submit">Gerenciar Produtos</button></div>
+        </form>
         <div class="card yellow">44<br>Captações Pendentes<br><button>Gerenciar Captação</button></div>
     </div>
 </body>

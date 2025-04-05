@@ -3,17 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gestão de Clientes</title>
-  <link rel="stylesheet" href="css/clientes.css" />
+  <title>Gestão de Produtos</title>
+  <link rel="stylesheet" href="css/produtos.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Gestão de Clientes</h1>
+    <h1>Gestão de Produtos</h1>
 
     <table id="tabela-clientes">
       <thead>
         <tr>
           <th>Nome</th>
+          <th>ID</th>
           <th>Ações</th>
         </tr>
       </thead>
@@ -21,13 +22,14 @@
     </table>
 
     <div class="form">
-      <h2>Cadastrar Cliente</h2>
-      <input type="text" id="nome" placeholder="Nome do cliente" />
-      <button onclick="adicionarCliente()">Adicionar Cliente</button>
+      <h2>Cadastrar Produto</h2>
+      <input type="text" id="nome" placeholder="Nome do produto" />
+      <input type="number" id="id" placeholder="ID do produto">
+      <button onclick="adicionarProdutos()">Adicionar Produto</button>
       <form action="/principal" method="get"><button type="submit"  class="pagIButton">Página Principal</button></form>
     </div>
   </div>
-  <script src="js/clientes.js">
+  <script src="js/produtos.js">
   </script>
 </body>
 </html>
