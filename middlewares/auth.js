@@ -1,5 +1,5 @@
 const secretKey = process.env.JWT_SECRET || 'MySecret'
-
+const jwt = require('jsonwebtoken')
 function verifyJWT(req, res, next) {
     const token = req.cookies.token;
     if (!token) {
@@ -14,3 +14,5 @@ function verifyJWT(req, res, next) {
         next()
     });
 }
+
+module.exports = { verifyJWT, secretKey };
