@@ -25,7 +25,15 @@ let produtos = [];
       const id =  idInput.value.trim()
       const nome = nomeInput.value.trim();  
       if (!nome || !id) return;
-
+      
+      const jaExiste = produtos.some(
+        (produto, i) =>
+          (produto.nome === nome || produto.id === id) && i !== editandoIndex
+      );
+      if (jaExiste) {
+        alert("Nome de produto ou ID já em uso");
+        return;
+      }
       if (editandoIndex !== null) {
         produtos[editandoIndex] = {nome, id};
         editandoIndex = null;

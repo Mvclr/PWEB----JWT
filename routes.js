@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const jwt = require("jsonwebtoken");
-const { verifyJWT, secretKey } = require("./middlewares/auth.js");
+const { verifyJWT, secretKey } = require("./functions/auth.js");
 const bcrypt = require('bcrypt')
 const router = express.Router();
 const cookieParser = require("cookie-parser");
