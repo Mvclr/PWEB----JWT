@@ -8,21 +8,22 @@ let produtos = [];
       produtos.forEach((produto, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${produtos[index]}</td>
-          <td></td>
+          <td>${produtos[index].nome}</td>
+          <td>${produtos[index].id}</td>
           <td>
-            <button onclick="editarCliente(${index})">✏️</button>
-            <button onclick="deletarCliente(${index})">🗑️</button>
+            <button onclick="editarProduto(${index})">✏️</button>
+            <button onclick="deletarProduto(${index})">🗑️</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    function adicionarProduto() {
+    function adicionarProdutos() {
       const nomeInput = document.getElementById('nome');
-      const id = document.getElementById('id')
-      const nome = nomeInput.value.trim();
+      const idInput = document.getElementById('id')
+      const id =  idInput.value.trim()
+      const nome = nomeInput.value.trim();  
       if (!nome || !id) return;
 
       if (editandoIndex !== null) {
@@ -32,6 +33,7 @@ let produtos = [];
         produtos.push({nome, id});
       }
       nomeInput.value = '';
+      id.value  = '';
       renderTabela();
     }
 
@@ -41,8 +43,9 @@ let produtos = [];
     }
 
     function editarProduto(index) {
-      document.getElementById('nome').value = produtos[index];
-      editandoIndex = index;
+        document.getElementById('nome').value = produtos[index].nome;
+        document.getElementById('id').value = produtos[index].id;
+        editandoIndex = index;
     }
 
     renderTabela();

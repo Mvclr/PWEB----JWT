@@ -58,6 +58,9 @@ router.post("/cadastro", async (req, res) => {
     res.status(201).json({message:"Usuário cadastrado com sucesso"})
     
   });
+router.get('/produtos', (req,res)=>{
+  res.sendFile(path.join(__dirname, 'views', 'produtos.html'))
+})
 
 // pra confirmar que o cookie ta sendo armazenado sem testes diretos do codigo, inspeciona a página no navegador e vai em aplicativo -> cookies -> localhost:3000 (ou qualquer que seja a porta se o senhor mudar aí), um teste que eu fiz aqui foi, ir lá e editar o valor do token porque ele permite, pra verificar se mudaria serverside, mas ta funcionando diretinho e ele ja redireciona pro /login
 
