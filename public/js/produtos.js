@@ -1,9 +1,9 @@
-let produtos = [];
+ let produtos = [{nome: "teste", id: 1}];
 
     let editandoIndex = null;
 
     function renderTabela() {
-      const tbody = document.querySelector('#tabela-clientes tbody');
+      const tbody = document.querySelector('#tabela tbody');
       tbody.innerHTML = '';
       produtos.forEach((produto, index) => {
         const tr = document.createElement('tr');
@@ -55,5 +55,10 @@ let produtos = [];
         document.getElementById('id').value = produtos[index].id;
         editandoIndex = index;
     }
+    document.addEventListener("DOMContentLoaded", () => {
+      const tabela = document.querySelector('#tabela');
+      if (tabela) renderTabela();
+    });
+    
 
-    renderTabela();
+    export {produtos}

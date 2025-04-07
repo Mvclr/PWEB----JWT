@@ -2,7 +2,7 @@ let clientes = [];
     let editandoIndex = null;
 
     function renderTabela() {
-      const tbody = document.querySelector('#tabela-clientes tbody');
+      const tbody = document.querySelector('#tabela tbody');
       tbody.innerHTML = '';
       clientes.forEach((cliente, index) => {
         const tr = document.createElement('tr');
@@ -41,5 +41,13 @@ let clientes = [];
       document.getElementById('nome').value = clientes[index];
       editandoIndex = index;
     }
+    document.addEventListener("DOMContentLoaded", () => {
+      const tabela = document.querySelector('#tabela');
+      if (tabela) renderTabela();
+    });
+    
+  
 
-    renderTabela();
+
+
+    export {clientes}
