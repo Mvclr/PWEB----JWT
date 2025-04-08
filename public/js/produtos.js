@@ -1,13 +1,13 @@
-import Product from '../classes/Product.js';
+import Product from "../classes/Product.js";
 
 let produtos = [];
 let editandoIndex = null;
 
 function renderTabela() {
-  const tbody = document.querySelector('#tabela tbody');
-  tbody.innerHTML = '';
+  const tbody = document.querySelector("#tabela tbody");
+  tbody.innerHTML = "";
   produtos.forEach((produto, index) => {
-    const tr = document.createElement('tr');
+    const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${produtos[index].nome}</td>
       <td>${produtos[index].id}</td>
@@ -21,8 +21,8 @@ function renderTabela() {
 }
 
 function adicionarProdutos() {
-  const nomeInput = document.getElementById('nome');
-  const idInput = document.getElementById('id');
+  const nomeInput = document.getElementById("nome");
+  const idInput = document.getElementById("id");
   const nome = nomeInput.value.trim();
   const id = idInput.value.trim();
   if (!nome || !id) return;
@@ -34,8 +34,8 @@ function adicionarProdutos() {
   } else {
     produtos.push(newProduct);
   }
-  nomeInput.value = '';
-  idInput.value = '';
+  nomeInput.value = "";
+  idInput.value = "";
   renderTabela();
 }
 
@@ -45,14 +45,14 @@ function deletarProduto(index) {
 }
 
 function editarProduto(index) {
-  document.getElementById('nome').value = produtos[index].nome;
-  document.getElementById('id').value = produtos[index].id;
+  document.getElementById("nome").value = produtos[index].nome;
+  document.getElementById("id").value = produtos[index].id;
   editandoIndex = index;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const tabela = document.querySelector('#tabela');
+  const tabela = document.querySelector("#tabela");
   if (tabela) renderTabela();
 });
 
-export {produtos};
+export { produtos };

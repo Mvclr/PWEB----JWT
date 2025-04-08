@@ -1,13 +1,13 @@
-import Client from '../classes/Client.js';
+import Client from "../classes/Client.js";
 
 let clientes = [];
 let editandoIndex = null;
 
 function renderTabela() {
-  const tbody = document.querySelector('#tabela tbody');
-  tbody.innerHTML = '';
+  const tbody = document.querySelector("#tabela tbody");
+  tbody.innerHTML = "";
   clientes.forEach((cliente, index) => {
-    const tr = document.createElement('tr');
+    const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${clientes[index].name}</td>
       <td>
@@ -20,7 +20,7 @@ function renderTabela() {
 }
 
 function adicionarCliente() {
-  const nomeInput = document.getElementById('nome');
+  const nomeInput = document.getElementById("nome");
   const nome = nomeInput.value.trim();
   if (!nome) return;
 
@@ -31,7 +31,7 @@ function adicionarCliente() {
   } else {
     clientes.push(newClient);
   }
-  nomeInput.value = '';
+  nomeInput.value = "";
   renderTabela();
 }
 
@@ -41,13 +41,13 @@ function deletarCliente(index) {
 }
 
 function editarCliente(index) {
-  document.getElementById('nome').value = clientes[index].name;
+  document.getElementById("nome").value = clientes[index].name;
   editandoIndex = index;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const tabela = document.querySelector('#tabela');
+  const tabela = document.querySelector("#tabela");
   if (tabela) renderTabela();
 });
 
-export {clientes}
+export { clientes };

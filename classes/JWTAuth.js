@@ -1,17 +1,25 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 class JWTAuth {
-    constructor(secretKey) {
-        this.secretKey = secretKey;
-    }
+  #secretKey;
 
-    generateToken(payload, expiresIn = '1h') {
-        return jwt.sign(payload, this.secretKey, { expiresIn });
-    }
+  constructor(secretKey) {
+    this.secretKey = secretKey;
+  }
 
-    verifyToken(token) {
-        return jwt.verify(token, this.secretKey);
-    }
+  get secretKey() {
+    return this.#secretKey;
+  }
+  set secretKey(value) {
+    this.#secretKey = value;
+  }
+  generateToken(payload, expiresIn = "1h") {
+    return jwt.sign(payload, this.secretKey, { expiresIn });
+  }
+
+  verifyToken(token) {
+    return jwt.verify(token, this.secretKey);
+  }
 }
 
 module.exports = JWTAuth;
