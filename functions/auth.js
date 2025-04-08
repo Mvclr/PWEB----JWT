@@ -1,18 +1,19 @@
-const secretKey = process.env.JWT_SECRET || 'MySecret'
-const jwt = require('jsonwebtoken')
+const JWTAuth = require('../classes/JWTAuth.js');
+const secretKey = process.env.JWT_SECRET || 'MySecret';
+const jwtAuth = new JWTAuth(secretKey);
+
 function verifyJWT(req, res, next) {
     const token = req.cookies.token;
     if (!token) {
-        return res.redirect('/login')
+        return res.redirect('/login');
     }
-    
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            return res.redirect('/login')
-        }
-        req.user = decoded;
-        next()
-    });
+
+    try {
+        req.user = jwtAuth.verifyToken(token);
+        next();
+    } catch (err) {
+        return res.redirect('/login');
+    }
 }
 
-module.exports = { verifyJWT, secretKey };
+module.exports = { verifyJWT, jwtAuth };

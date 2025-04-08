@@ -1,64 +1,58 @@
- let produtos = [{nome: "teste", id: 1}];
+import Product from '../classes/Product.js';
 
-    let editandoIndex = null;
+let produtos = [];
+let editandoIndex = null;
 
-    function renderTabela() {
-      const tbody = document.querySelector('#tabela tbody');
-      tbody.innerHTML = '';
-      produtos.forEach((produto, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${produtos[index].nome}</td>
-          <td>${produtos[index].id}</td>
-          <td>
-            <button onclick="editarProduto(${index})">✏️</button>
-            <button onclick="deletarProduto(${index})">🗑️</button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+function renderTabela() {
+  const tbody = document.querySelector('#tabela tbody');
+  tbody.innerHTML = '';
+  produtos.forEach((produto, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${produtos[index].nome}</td>
+      <td>${produtos[index].id}</td>
+      <td>
+        <button onclick="editarProduto(${index})">✏️</button>
+        <button onclick="deletarProduto(${index})">🗑️</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
 
-    function adicionarProdutos() {
-      const nomeInput = document.getElementById('nome');
-      const idInput = document.getElementById('id')
-      const id =  idInput.value.trim()
-      const nome = nomeInput.value.trim();  
-      if (!nome || !id) return;
-      
-      const jaExiste = produtos.some(
-        (produto, i) =>
-          (produto.nome === nome || produto.id === id) && i !== editandoIndex
-      );
-      if (jaExiste) {
-        alert("Nome de produto ou ID já em uso");
-        return;
-      }
-      if (editandoIndex !== null) {
-        produtos[editandoIndex] = {nome, id};
-        editandoIndex = null;
-      } else {
-        produtos.push({nome, id});
-      }
-      nomeInput.value = '';
-      id.value  = '';
-      renderTabela();
-    }
+function adicionarProdutos() {
+  const nomeInput = document.getElementById('nome');
+  const idInput = document.getElementById('id');
+  const nome = nomeInput.value.trim();
+  const id = idInput.value.trim();
+  if (!nome || !id) return;
 
-    function deletarProduto(index) {
-      produtos.splice(index, 1);
-      renderTabela();
-    }
+  const newProduct = new Product(nome, id);
+  if (editandoIndex !== null) {
+    produtos[editandoIndex] = newProduct;
+    editandoIndex = null;
+  } else {
+    produtos.push(newProduct);
+  }
+  nomeInput.value = '';
+  idInput.value = '';
+  renderTabela();
+}
 
-    function editarProduto(index) {
-        document.getElementById('nome').value = produtos[index].nome;
-        document.getElementById('id').value = produtos[index].id;
-        editandoIndex = index;
-    }
-    document.addEventListener("DOMContentLoaded", () => {
-      const tabela = document.querySelector('#tabela');
-      if (tabela) renderTabela();
-    });
-    
+function deletarProduto(index) {
+  produtos.splice(index, 1);
+  renderTabela();
+}
 
-    export {produtos}
+function editarProduto(index) {
+  document.getElementById('nome').value = produtos[index].nome;
+  document.getElementById('id').value = produtos[index].id;
+  editandoIndex = index;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const tabela = document.querySelector('#tabela');
+  if (tabela) renderTabela();
+});
+
+export {produtos};
