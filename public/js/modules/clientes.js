@@ -19,7 +19,8 @@ function renderTabela() {
   });
 }
 
-function adicionarCliente(){
+
+function adicionarCliente() {
   const nomeInput = document.getElementById("nome");
   const nome = nomeInput.value.trim();
   if (!nome) return;
@@ -32,8 +33,8 @@ function adicionarCliente(){
     clientes.push(newClient);
   }
   nomeInput.value = "";
-  renderTabela();
-}
+  renderTabela()
+};
 
 function deletarCliente(index) {
   clientes.splice(index, 1);

@@ -14,11 +14,11 @@ class JWTAuth {
     this.#secretKey = value;
   }
   generateToken(payload, expiresIn = "1h") {
-    return jwt.sign(payload, getSecretKey(), { expiresIn });
+    return jwt.sign(payload, this.#secretKey, { expiresIn });
   }
 
   verifyToken(token) {
-    return jwt.verify(token, getSecretKey());
+    return jwt.verify(token, this.#secretKey);
   }
 }
 
