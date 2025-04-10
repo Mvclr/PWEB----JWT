@@ -4,21 +4,21 @@ class JWTAuth {
   #secretKey;
 
   constructor(secretKey) {
-    this.secretKey = secretKey;
+    this.#secretKey = secretKey;
   }
 
-  get secretKey() {
+  getSecretKey() {
     return this.#secretKey;
   }
-  set secretKey(value) {
+  setSecretKey(value) {
     this.#secretKey = value;
   }
   generateToken(payload, expiresIn = "1h") {
-    return jwt.sign(payload, this.secretKey, { expiresIn });
+    return jwt.sign(payload, getSecretKey(), { expiresIn });
   }
 
   verifyToken(token) {
-    return jwt.verify(token, this.secretKey);
+    return jwt.verify(token, getSecretKey());
   }
 }
 
