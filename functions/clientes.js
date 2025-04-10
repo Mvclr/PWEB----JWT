@@ -1,4 +1,4 @@
-import Client from '../classes/Client.js';
+import Client from '../public/js/classes/Client.js';
 
 let clientes = [];
 let editandoIndex = null;
@@ -20,7 +20,7 @@ function renderTabela() {
 }
 
 
-function adicionarCliente() {
+export function adicionarCliente() {
   const nomeInput = document.getElementById("nome");
   const nome = nomeInput.value.trim();
   if (!nome) return;
@@ -36,12 +36,12 @@ function adicionarCliente() {
   renderTabela()
 };
 
-function deletarCliente(index) {
+ export function deletarCliente(index) {
   clientes.splice(index, 1);
   renderTabela();
 }
 
-function editarCliente(index) {
+ export function editarCliente(index) {
   document.getElementById("nome").value = clientes[index].name;
   editandoIndex = index;
 }
