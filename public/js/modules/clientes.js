@@ -1,4 +1,4 @@
-import Client from "../classes/Client.js";
+import Client from '../classes/Client.js';
 
 let clientes = [];
 let editandoIndex = null;
@@ -19,7 +19,7 @@ function renderTabela() {
   });
 }
 
-function adicionarCliente() {
+function adicionarCliente(){
   const nomeInput = document.getElementById("nome");
   const nome = nomeInput.value.trim();
   if (!nome) return;

@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const jwt = require("jsonwebtoken");
-const { verifyJWT, secretKey } = require("./functions/auth.js");
+const { verifyJWT, jwtAuth } = require("./functions/auth.js");
 const bcrypt = require("bcrypt");
 const User = require("./classes/User.js");
 const router = express.Router();
@@ -17,7 +17,6 @@ router.get("/login", (req, res) => {
 });
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
-  console.log(users);
 });
 router.post("/login", async (req, res) => {
   const { user, password } = req.body;
@@ -32,7 +31,7 @@ router.post("/login", async (req, res) => {
     return res.status(401).json({ message: "Senha incorreta" });
   }
 
-  const token = jwt.sign({ user: foundUser.username }, secretKey, {
+  const token = jwt.sign({ user: foundUser.username }, jwtAuth.getSecretKey(), {
     expiresIn: 30000,
   });
   res.cookie("token", token, { httpOnly: true, maxAge: 30000000 });
@@ -46,7 +45,6 @@ router.get("/clientes", verifyJWT, (req, res) => {
 });
 router.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "register.html"));
-  console.log(users);
 });
 router.post("/cadastro", async (req, res) => {
   const { name, user, password } = req.body;
@@ -60,9 +58,9 @@ router.post("/cadastro", async (req, res) => {
   const newUser = new User(name, user, password);
   await newUser.hashPassword();
   users.push(newUser);
-  res.status(201).json({ message: "Usuário cadastrado com sucesso" });
+  res.sendFile(path.join(__dirname, "views", "login.html"));
 });
-router.get("/produtos", (req, res) => {
+router.get("/produtos", verifyJWT, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "produtos.html"));
 });
 

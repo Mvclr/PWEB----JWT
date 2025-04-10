@@ -1,8 +1,8 @@
-import { clientes } from "./clientes.js";
-import { produtos } from "./produtos.js";
+import { clientes } from "./modules/clientes.js";
+import { produtos } from "./modules/produtos.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-let principalHtml = document.querySelector('.div-js')
+let principalHtml = document.querySelector('#div-js');
 let html =  `
     <form action="/clientes" method="get">
             <div class="card black" >${clientes.length}<br>Clientes Ativos<br><button type="submit">Gerenciar Clientes</button></div>
