@@ -1,4 +1,4 @@
-import Client from '../public/js/classes/Client.js';
+import Client from "../classes/Client.js";
 
 let clientes = [];
 let editandoIndex = null;
@@ -11,16 +11,23 @@ function renderTabela() {
     tr.innerHTML = `
       <td>${clientes[index].name}</td>
       <td>
-        <button onclick="editarCliente(${index})">✏️</button>
-        <button onclick="deletarCliente(${index})">🗑️</button>
+        <button  id="edit-button">✏️</button>
+        <button  id="delete-button">🗑️</button>
       </td>
     `;
     tbody.appendChild(tr);
+    const editButton = tr.querySelector("#edit-button");
+      editButton.addEventListener("click", () => {
+        editarCliente(index);
+      });
+    const deleteButton = tr.querySelector("#delete-button");
+      deleteButton.addEventListener("click", () => {
+        deletarCliente(index);
+      });
   });
 }
 
-
-export function adicionarCliente() {
+function adicionarCliente() {
   const nomeInput = document.getElementById("nome");
   const nome = nomeInput.value.trim();
   if (!nome) return;
@@ -33,15 +40,15 @@ export function adicionarCliente() {
     clientes.push(newClient);
   }
   nomeInput.value = "";
-  renderTabela()
-};
+  renderTabela();
+}
 
- export function deletarCliente(index) {
+function deletarCliente(index) {
   clientes.splice(index, 1);
   renderTabela();
 }
 
- export function editarCliente(index) {
+function editarCliente(index) {
   document.getElementById("nome").value = clientes[index].name;
   editandoIndex = index;
 }
@@ -49,6 +56,14 @@ export function adicionarCliente() {
 document.addEventListener("DOMContentLoaded", () => {
   const tabela = document.querySelector("#tabela");
   if (tabela) renderTabela();
+
+  const addButton = document.querySelector("#add-button");
+  if (addButton) {
+    addButton.addEventListener("click", () => {
+      adicionarCliente();
+    });
+  }
 });
+
 
 export { clientes };

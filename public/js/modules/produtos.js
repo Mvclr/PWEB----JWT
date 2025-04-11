@@ -1,4 +1,4 @@
-import Product from "../public/js/classes/Product.js";
+import Product from "../classes/Product.js";
 
 let produtos = [];
 let editandoIndex = null;

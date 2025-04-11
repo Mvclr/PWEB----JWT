@@ -6,7 +6,6 @@ const bcrypt = require("bcrypt");
 const User = require("./classes/User.js");
 const router = express.Router();
 const cookieParser = require("cookie-parser");
-import {}
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 router.use(express.static(path.join(__dirname, "public")));
