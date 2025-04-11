@@ -12,11 +12,20 @@ function renderTabela() {
       <td>${produtos[index].nome}</td>
       <td>${produtos[index].id}</td>
       <td>
-        <button onclick="editarProduto(${index})">✏️</button>
-        <button onclick="deletarProduto(${index})">🗑️</button>
+        <button id="edit-button">✏️</button>
+        <button id="delete-button">🗑️</button>
       </td>
     `;
     tbody.appendChild(tr);
+
+    const editButton = tr.querySelector("#edit-button");
+    editButton.addEventListener("click", () => {
+      editarProduto(index);
+    });
+    const deleteButton = tr.querySelector("#delete-button");
+    deleteButton.addEventListener("click", () => {
+      deletarProduto(index);
+    });
   });
 }
 
@@ -53,6 +62,11 @@ function editarProduto(index) {
 document.addEventListener("DOMContentLoaded", () => {
   const tabela = document.querySelector("#tabela");
   if (tabela) renderTabela();
+
+  const addButton = document.querySelector("#add-button");
+if (addButton) {
+  addButton.addEventListener("click", adicionarProdutos);
+}
 });
 
 export { produtos };
