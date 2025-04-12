@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const User = require("./classes/User.js");
 const router = express.Router();
 const cookieParser = require("cookie-parser");
+const connection = require("./db/db_server.js");
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 router.use(express.static(path.join(__dirname, "public")));
@@ -48,7 +49,20 @@ router.get("/cadastro", (req, res) => {
 });
 router.post("/cadastro", async (req, res) => {
   const { name, user, password } = req.body;
-  const userVerify = users.find((u) => u.username === user);
+  const userVerify = await new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT name FROM user WHERE username = ?",
+      [user],
+      (error, results) => {
+        if (error) {
+          console.error("Error checking user:", error);
+          reject(res.status(500).json({ message: "Erro ao verificar usuário" }));
+        } else {
+          resolve(results.length > 0);
+        }
+      }
+    );
+  });
   if (userVerify) {
     return res
       .status(401)
@@ -58,6 +72,18 @@ router.post("/cadastro", async (req, res) => {
   const newUser = new User(name, user, password);
   await newUser.hashPassword();
   users.push(newUser);
+  connection.query(
+    "INSERT INTO user (name, username, password) VALUES (?, ?, ?)",
+    [newUser.name, newUser.username, newUser.password],
+    (error, results) => {
+      if (error) {
+        console.error("Error inserting user:", error);
+        return res.status(500).json({ message: "Erro ao cadastrar usuário" });
+      }
+      console.log("User registered successfully:", results);
+      res.sendFile(path.join(__dirname, "views", "login.html"));
+    }
+  );
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
 router.get("/produtos", verifyJWT, (req, res) => {
