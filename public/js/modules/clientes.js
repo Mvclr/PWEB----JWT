@@ -1,5 +1,4 @@
 import Client from "../classes/Client.js";
-
 let clientes = [];
 let editandoIndex = null;
 
@@ -38,6 +37,7 @@ function adicionarCliente() {
     editandoIndex = null;
   } else {
     clientes.push(newClient);
+    
   }
   nomeInput.value = "";
   renderTabela();

@@ -19,38 +19,7 @@ router.get("/login", (req, res) => {
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
-router.post("/login", async (req, res) => {
-  const { user, password } = req.body;
-  const foundUser = await new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT * FROM user WHERE username = ?",
-      [user],
-      (error, results) => {
-        if (error) {
-          console.error("Error checking user:", error);
-          reject(res.status(500).json({ message: "Erro ao verificar usuário" }));
-        } else {
-          resolve(results[0]); // Return the first user object if found
-        }
-      }
-    );
-  });
 
-  if (!foundUser) {
-    return res.status(401).json({ message: "Usuário não encontrado" });
-  }
-
-  const passwordMatch = await bcrypt.compare(password, foundUser.password);
-  if (!passwordMatch) {
-    return res.status(401).json({ message: "Senha incorreta" });
-  }
-
-  const token = jwt.sign({ user: foundUser.username }, jwtAuth.getSecretKey(), {
-    expiresIn: 30000,
-  });
-  res.cookie("token", token, { httpOnly: true, maxAge: 30000000 });
-  return res.sendFile(path.join(__dirname, "views", "principal.html"));
-});
 router.get("/principal", verifyJWT, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "principal.html"));
 });
@@ -59,6 +28,10 @@ router.get("/clientes", verifyJWT, (req, res) => {
 });
 router.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "register.html"));
+});
+
+router.get("/produtos", verifyJWT, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "produtos.html"));
 });
 router.post("/cadastro", async (req, res) => {
   const { name, user, password } = req.body;
@@ -99,10 +72,38 @@ router.post("/cadastro", async (req, res) => {
   );
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
-router.get("/produtos", verifyJWT, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "produtos.html"));
-});
+router.post("/login", async (req, res) => {
+  const { user, password } = req.body;
+  const foundUser = await new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM user WHERE username = ?",
+      [user],
+      (error, results) => {
+        if (error) {
+          console.error("Error checking user:", error);
+          reject(res.status(500).json({ message: "Erro ao verificar usuário" }));
+        } else {
+          resolve(results[0]); // Return the first user object if found
+        }
+      }
+    );
+  });
 
+  if (!foundUser) {
+    return res.status(401).json({ message: "Usuário não encontrado" });
+  }
+
+  const passwordMatch = await bcrypt.compare(password, foundUser.password);
+  if (!passwordMatch) {
+    return res.status(401).json({ message: "Senha incorreta" });
+  }
+
+  const token = jwt.sign({ user: foundUser.username }, jwtAuth.getSecretKey(), {
+    expiresIn: 30000,
+  });
+  res.cookie("token", token, { httpOnly: true, maxAge: 30000000 });
+  return res.sendFile(path.join(__dirname, "views", "principal.html"));
+});
 // pra confirmar que o cookie ta sendo armazenado sem testes diretos do codigo, inspeciona a página no navegador e vai em aplicativo -> cookies -> localhost:3000 (ou qualquer que seja a porta se o senhor mudar aí), um teste que eu fiz aqui foi, ir lá e editar o valor do token porque ele permite, pra verificar se mudaria serverside, mas ta funcionando diretinho e ele ja redireciona pro /login
 
 module.exports = router;
