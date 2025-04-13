@@ -21,13 +21,26 @@ router.get("/", (req, res) => {
 });
 router.post("/login", async (req, res) => {
   const { user, password } = req.body;
-  const foundUser = users.find((u) => u.username === user);
+  const foundUser = await new Promise((resolve, reject) => {
+    connection.query(
+      "SELECT * FROM user WHERE username = ?",
+      [user],
+      (error, results) => {
+        if (error) {
+          console.error("Error checking user:", error);
+          reject(res.status(500).json({ message: "Erro ao verificar usuário" }));
+        } else {
+          resolve(results[0]); // Return the first user object if found
+        }
+      }
+    );
+  });
 
   if (!foundUser) {
     return res.status(401).json({ message: "Usuário não encontrado" });
   }
 
-  const passwordMatch = await foundUser.verifyPassword(password);
+  const passwordMatch = await bcrypt.compare(password, foundUser.password);
   if (!passwordMatch) {
     return res.status(401).json({ message: "Senha incorreta" });
   }
