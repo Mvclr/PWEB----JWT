@@ -10,16 +10,16 @@ function renderTabela() {
     tr.innerHTML = `
       <td>${clientes[index].name}</td>
       <td>
-        <button  id="edit-button">✏️</button>
-        <button  id="delete-button">🗑️</button>
+        <button  class="edit-button">✏️</button>
+        <button  class="delete-button">🗑️</button>
       </td>
     `;
     tbody.appendChild(tr);
-    const editButton = tr.querySelector("#edit-button");
+    const editButton = tr.querySelector(".edit-button");
       editButton.addEventListener("click", () => {
         editarCliente(index);
       });
-    const deleteButton = tr.querySelector("#delete-button");
+    const deleteButton = tr.querySelector(".delete-button");
       deleteButton.addEventListener("click", () => {
         deletarCliente(index);
       });
