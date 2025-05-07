@@ -105,5 +105,18 @@ router.post("/login", async (req, res) => {
   return res.sendFile(path.join(__dirname, "views", "principal.html"));
 });
 // pra confirmar que o cookie ta sendo armazenado sem testes diretos do codigo, inspeciona a página no navegador e vai em aplicativo -> cookies -> localhost:3000 (ou qualquer que seja a porta se o senhor mudar aí), um teste que eu fiz aqui foi, ir lá e editar o valor do token porque ele permite, pra verificar se mudaria serverside, mas ta funcionando diretinho e ele ja redireciona pro /login
+router.post("/clientes", verifyJWT, (req, res) => {
+  const name = req.body.name;
+  connection.query(
+    "INSERT INTO clients (name) VALUES(?)",
+    [name],
+    (err, results) => {
+      if (err) {
+        return res.status(500).send("Erro ao inserir cliente");
+      }
+      res.redirect("/clientes");
+    }
+  );
+});
 
 module.exports = router;
