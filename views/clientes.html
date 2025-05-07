@@ -22,9 +22,11 @@
 
     <div class="form">
       <h2>Cadastrar Cliente</h2>
-      <input type="text" id="nome" placeholder="Nome do cliente" />
-      <button id="add-button">Adicionar Cliente</button>
-      <form action="/principal" method="get"><button type="submit"  class="pagIButton">Página Principal</button></form>
+        <form action="/clientes" method="post">
+          <input type="text" placeholder="Nome do cliente" name="name"/>
+          <button class="add-button" type="submit">Adicionar Cliente</button>
+        </form>
+        <form action="/principal" method="get"><button type="submit"  class="pagIButton">Página Principal</button></form>
     </div>
   </div>
   <script  type="module" src="js\modules\clientes.js"> </script>
