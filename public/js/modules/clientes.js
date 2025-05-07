@@ -1,4 +1,5 @@
 import Client from "../classes/Client.js";
+
 let clientes = [];
 let editandoIndex = null;
 
@@ -27,7 +28,7 @@ function renderTabela() {
 }
 
 function adicionarCliente() {
-  const nomeInput = document.getElementById("nome");
+  const nomeInput = document.querySelector('.nome')
   const nome = nomeInput.value.trim();
   if (!nome) return;
 
@@ -57,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const tabela = document.querySelector("#tabela");
   if (tabela) renderTabela();
 
-  const addButton = document.querySelector("#add-button");
+  const addButton = document.querySelector(".add-button");
   if (addButton) {
     addButton.addEventListener("click", () => {
       adicionarCliente();
