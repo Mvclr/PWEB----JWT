@@ -3,32 +3,45 @@ import Client from "../classes/Client.js";
 let clientes = [];
 let editandoIndex = null;
 
+// Fetch clients from the server
+async function fetchClients() {
+  try {
+    const response = await fetch('/api/clients');
+    if (!response.ok) {
+      throw new Error('Failed to fetch clients');
+    }
+    const data = await response.json();
+    clientes = data.map(client => new Client(client.name)); // Map database rows to Client objects
+    renderTabela(); // Render the table after fetching the data
+  } catch (error) {
+    console.error('Error fetching clients:', error);
+  }
+}
+
 function renderTabela() {
   const tbody = document.querySelector("#tabela tbody");
   tbody.innerHTML = "";
   clientes.forEach((cliente, index) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${clientes[index].name}</td>
+      <td>${cliente.name}</td>
       <td>
-        <button  class="edit-button">✏️</button>
-        <button  class="delete-button">🗑️</button>
+        <button class="edit-button">✏️</button>
+        <button class="delete-button">🗑️</button>
       </td>
     `;
     tbody.appendChild(tr);
+
     const editButton = tr.querySelector(".edit-button");
-      editButton.addEventListener("click", () => {
-        editarCliente(index);
-      });
+    editButton.addEventListener("click", () => editarCliente(index));
+
     const deleteButton = tr.querySelector(".delete-button");
-      deleteButton.addEventListener("click", () => {
-        deletarCliente(index);
-      });
+    deleteButton.addEventListener("click", () => deletarCliente(index));
   });
 }
 
 function adicionarCliente() {
-  const nomeInput = document.querySelector('.nome')
+  const nomeInput = document.querySelector('.nome');
   const nome = nomeInput.value.trim();
   if (!nome) return;
 
@@ -38,7 +51,6 @@ function adicionarCliente() {
     editandoIndex = null;
   } else {
     clientes.push(newClient);
-    
   }
   nomeInput.value = "";
   renderTabela();
@@ -55,8 +67,7 @@ function editarCliente(index) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const tabela = document.querySelector("#tabela");
-  if (tabela) renderTabela();
+  fetchClients(); // Fetch clients when the page loads
 
   const addButton = document.querySelector(".add-button");
   if (addButton) {
@@ -65,6 +76,5 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
 
 export { clientes };
