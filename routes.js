@@ -1,128 +1,17 @@
 const express = require("express");
-const path = require("path");
-const jwt = require("jsonwebtoken");
-const { verifyJWT, jwtAuth } = require("./functions/auth.js");
-const bcrypt = require("bcrypt");
-const User = require("./classes/User.js");
+const loginRoutes = require("./routes/loginRoute");
+const principalRoutes = require("./routes/principalRoute");
+const clientesRoutes = require("./routes/clientesRoute");
+const cadastroRoutes = require("./routes/cadastroRoute");
+const produtosRoutes = require("./routes/produtosRoute");
+
 const router = express.Router();
-const cookieParser = require("cookie-parser");
-const connection = require("./db/db_server.js");
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
-router.use(express.static(path.join(__dirname, "public")));
-router.use(cookieParser());
-let users = [];
 
-router.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "login.html"));
-});
-router.get("/", verifyJWT, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "principal.html"));
-});
-router.get("/principal", verifyJWT, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "principal.html"));
-});
-router.get("/clientes", verifyJWT, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "clientes.html"));
-});
-router.get("/cadastro", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "register.html"));
-});
-router.get('/api/clients', (req, res) => {
-  connection.query('SELECT * FROM clients', (err, results) => {
-    if (err) {
-      console.error('Error fetching clients:', err);
-      return res.status(500).json({ message: 'Erro ao buscar clientes' });
-    }
-    res.json(results);
-  });
-});
-router.get("/produtos", verifyJWT, (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "produtos.html"));
-});
+router.use(loginRoutes);
+router.use(principalRoutes);
+router.use(clientesRoutes);
+router.use(cadastroRoutes);
+router.use(produtosRoutes);
 
-router.post("/cadastro", async (req, res) => {
-  const { name, user, password } = req.body;
-  const userVerify = await new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT name FROM user WHERE username = ?",
-      [user],
-      (error, results) => {
-        if (error) {
-          console.error("Error checking user:", error);
-          reject(res.status(500).json({ message: "Erro ao verificar usuário" }));
-        } else {
-          resolve(results.length > 0);
-        }
-      }
-    );
-  });
-  if (userVerify) {
-    return res
-      .status(401)
-      .json({ message: "Usuário já cadastrado, tente outro nome de usuário" });
-  }
-
-  const newUser = new User(name, user, password);
-  await newUser.hashPassword();
-  users.push(newUser);
-  connection.query(
-    "INSERT INTO user (name, username, password) VALUES (?, ?, ?)",
-    [newUser.name, newUser.username, newUser.password],
-    (error, results) => {
-      if (error) {
-        console.error("Error inserting user:", error);
-        return res.status(500).json({ message: "Erro ao cadastrar usuário" });
-      }
-      console.log("User registered successfully:", results);
-      res.sendFile(path.join(__dirname, "views", "login.html"));
-    }
-  );
-  res.sendFile(path.join(__dirname, "views", "login.html"));
-});
-router.post("/login", async (req, res) => {
-  const { user, password } = req.body;
-  const foundUser = await new Promise((resolve, reject) => {
-    connection.query(
-      "SELECT * FROM user WHERE username = ?",
-      [user],
-      (error, results) => {
-        if (error) {
-          console.error("Error checking user:", error);
-          reject(res.status(500).json({ message: "Erro ao verificar usuário" }));
-        } else {
-          resolve(results[0]); // Return the first user object if found
-        }
-      }
-    );
-  });
-
-  if (!foundUser) {
-    return res.status(401).json({ message: "Usuário não encontrado" });
-  }
-
-  const passwordMatch = await bcrypt.compare(password, foundUser.password);
-  if (!passwordMatch) {
-    return res.status(401).json({ message: "Senha incorreta" });
-  }
-
-  const token = jwt.sign({ user: foundUser.username }, jwtAuth.getSecretKey(), {
-    expiresIn: 30000,
-  });
-  res.cookie("token", token, { httpOnly: true, maxAge: 30000000 });
-  return res.sendFile(path.join(__dirname, "views", "principal.html"));
-});
-router.post("/logout", (req, res) => {
-  res.clearCookie("token");
-  res.redirect("/login");
-})
-router.post("/clientes", (req, res) => {
-  const {name} = req.body;
-  const query = "INSERT INTO clients (name) VALUES (?)";
-  connection.query(query, [name], (err, results) => {
-    if (err) {
-      console.error("Error inserting client:", err);
-    }
-})});
 
 module.exports = router;
