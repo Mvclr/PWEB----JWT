@@ -10,17 +10,12 @@
     <div class="sidebar">
         <h3>sistema</h3>
         <ul>
-            <li>Home</li>
-            <li>Clientes</li>
-            <li>Cadastro</li>
-            <li>Consulta</li>
-            <li>Produtos</li>
-            <li>Relatório</li>
-            <form action="/logout" method="post"><button><li>Logout</li></button></form>
+            <li><form action="/clientes" method="get"><button class="li-button">Clientes</button></form></li>
+            <li><form action="/produtos" method="get"><button class="li-button">Produtos</button></form></li>
+            <li><form action="/logOut" method="post"><button class="li-button">Sair da Conta</button></form></li>
         </ul>
     </div>
     <div class="main-dashboard div-js">
-        
     </div>
     <script type="module" src="js\principal.js"></script>
 </body>
