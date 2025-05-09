@@ -18,6 +18,7 @@ async function fetchClients() {
 }
 
 function renderTabela() {
+  fetchClients()
   const tbody = document.querySelector("#tabela tbody");
   tbody.innerHTML = "";
   clientes.forEach((cliente, index) => {
@@ -39,21 +40,6 @@ function renderTabela() {
   });
 }
 
-function adicionarCliente() {
-  const nomeInput = document.querySelector(".nome");
-  const nome = nomeInput.value.trim();
-  if (!nome) return;
-
-  const newClient = new Client(nome);
-  if (editandoIndex !== null) {
-    clientes[editandoIndex] = newClient;
-    editandoIndex = null;
-  } else {
-    clientes.push(newClient);
-  }
-  nomeInput.value = "";
-  renderTabela();
-}
 
 function deletarCliente(index) {
   clientes.splice(index, 1);

@@ -16,8 +16,8 @@ let users = [];
 router.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
-router.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "login.html"));
+router.get("/", verifyJWT, (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "principal.html"));
 });
 router.get("/principal", verifyJWT, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "principal.html"));
@@ -116,7 +116,13 @@ router.post("/logout", (req, res) => {
   res.clearCookie("token");
   res.redirect("/login");
 })
-
-
+router.post("/clientes", (req, res) => {
+  const {name} = req.body;
+  const query = "INSERT INTO clients (name) VALUES (?)";
+  connection.query(query, [name], (err, results) => {
+    if (err) {
+      console.error("Error inserting client:", err);
+    }
+})});
 
 module.exports = router;
