@@ -1,6 +1,7 @@
 class Client {
-  constructor(name) {
+  constructor(name, id) {
     this.name = name;
+    this.id = id;
   }
 }
 
