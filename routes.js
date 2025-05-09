@@ -19,7 +19,6 @@ router.get("/login", (req, res) => {
 router.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "login.html"));
 });
-
 router.get("/principal", verifyJWT, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "principal.html"));
 });
@@ -29,10 +28,19 @@ router.get("/clientes", verifyJWT, (req, res) => {
 router.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "register.html"));
 });
-
+router.get('/api/clients', (req, res) => {
+  connection.query('SELECT * FROM clients', (err, results) => {
+    if (err) {
+      console.error('Error fetching clients:', err);
+      return res.status(500).json({ message: 'Erro ao buscar clientes' });
+    }
+    res.json(results);
+  });
+});
 router.get("/produtos", verifyJWT, (req, res) => {
   res.sendFile(path.join(__dirname, "views", "produtos.html"));
 });
+
 router.post("/cadastro", async (req, res) => {
   const { name, user, password } = req.body;
   const userVerify = await new Promise((resolve, reject) => {
@@ -104,16 +112,11 @@ router.post("/login", async (req, res) => {
   res.cookie("token", token, { httpOnly: true, maxAge: 30000000 });
   return res.sendFile(path.join(__dirname, "views", "principal.html"));
 });
-// pra confirmar que o cookie ta sendo armazenado sem testes diretos do codigo, inspeciona a página no navegador e vai em aplicativo -> cookies -> localhost:3000 (ou qualquer que seja a porta se o senhor mudar aí), um teste que eu fiz aqui foi, ir lá e editar o valor do token porque ele permite, pra verificar se mudaria serverside, mas ta funcionando diretinho e ele ja redireciona pro /login
-router.get('/api/clients', (req, res) => {
-  connection.query('SELECT * FROM clients', (err, results) => {
-    if (err) {
-      console.error('Error fetching clients:', err);
-      return res.status(500).json({ message: 'Erro ao buscar clientes' });
-    }
-    res.json(results); // Send the clients as a JSON response
-  });
-});
+router.post("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.redirect("/login");
+})
+
 
 
 module.exports = router;

@@ -3,18 +3,17 @@ import Client from "../classes/Client.js";
 let clientes = [];
 let editandoIndex = null;
 
-// Fetch clients from the server
 async function fetchClients() {
   try {
-    const response = await fetch('/api/clients');
+    const response = await fetch("/api/clients");
     if (!response.ok) {
-      throw new Error('Failed to fetch clients');
+      throw new Error("Failed to fetch clients");
     }
     const data = await response.json();
-    clientes = data.map(client => new Client(client.name)); // Map database rows to Client objects
-    renderTabela(); // Render the table after fetching the data
+    clientes = data.map((client) => new Client(client.name));
+    renderTabela();
   } catch (error) {
-    console.error('Error fetching clients:', error);
+    console.error("Error fetching clients:", error);
   }
 }
 
@@ -41,7 +40,7 @@ function renderTabela() {
 }
 
 function adicionarCliente() {
-  const nomeInput = document.querySelector('.nome');
+  const nomeInput = document.querySelector(".nome");
   const nome = nomeInput.value.trim();
   if (!nome) return;
 
