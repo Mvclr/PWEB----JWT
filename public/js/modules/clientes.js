@@ -7,12 +7,12 @@ async function fetchClients() {
   try {
     const response = await fetch("/api/clientsTable");
     if (!response.ok) {
-      throw new Error("Failed to fetch clients");
+      throw new Error("Falha ao buscar clientes");
     }
     const data = await response.json();
     clientes = data.map((client) => new Client(client.name, client.id));
   } catch (error) {
-    console.error("Error fetching clients:", error);
+    console.error("Erro ao buscar clientes:", error);
   }
 }
 
@@ -81,10 +81,10 @@ async function deletarCliente(id) {
           renderTabela();
         })
         .catch((error) => {
-          console.error("Error rendering table:", error);
+          console.error("Erro na geração da tabela:", error);
         });
   } catch (error) {
-    console.error("Error deleting client:", error);
+    console.error("Erro ao delatar cliente:", error);
   }
 }
 

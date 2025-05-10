@@ -19,7 +19,7 @@ router.get('/api/clients', (req, res) => {
     connection.query('SELECT COUNT(*) AS total_clients FROM clients', (err, result) => {
         if (err) {
             console.error(err);
-            return res.status(500).send('Database error');
+            return res.status(500).send('Erro no DB');
         }
         res.json({ total_clients: result[0].total_clients });
     });
@@ -29,7 +29,7 @@ router.get('/api/products', (req, res) => {
     connection.query('SELECT COUNT(*) AS total_products FROM products', (err, result) => {
         if (err) {
             console.error(err);
-            return res.status(500).send('Database error');
+            return res.status(500).send('Erro no banco de dados');
         }
         res.json({ total_products: result[0].total_products });
     });
