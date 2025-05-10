@@ -10,7 +10,7 @@ router.use(express.static(path.join(__dirname, "../public")));
 router.get("/clientes", verifyJWT, (req, res) => {
   res.sendFile(path.join(__dirname, "../views", "clientes.html"));
 });
-router.get("/api/clients", (req, res) => {
+router.get("/api/clientsTable", (req, res) => {
   connection.query("SELECT * FROM clients", (err, results) => {
     if (err) {
       console.error("Error fetching clients:", err);
@@ -20,7 +20,6 @@ router.get("/api/clients", (req, res) => {
   });
 });
 
-
 router.post("/clientes", (req, res) => {
   const { name } = req.body;
   const query = "INSERT INTO clients (name) VALUES (?)";
@@ -29,8 +28,7 @@ router.post("/clientes", (req, res) => {
       console.error("Error inserting client:", err);
       return res.status(500).json({ message: "Erro ao adicionar cliente" });
     }
-    const newClient = { id: results.insertId, name };
-    res.status(201).json(newClient);
+    res.redirect("/clientes");
   });
 });
 
@@ -41,9 +39,22 @@ router.delete("/clientes/:id", (req, res) => {
     if (err) {
       console.error("Error deleting client:", err);
       return res.status(500).json({ message: "Erro ao deletar cliente" });
-    }
+    } 
   });
+  res.redirect("/clientes");
 });
 
-  
+router.put("/clientes/:id", (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
+  const query = "UPDATE clients SET name = ? WHERE id = ?";
+  connection.query(query, [name, id], (err, results) => {
+    if (err) {
+      console.error("Error updating client:", err);
+      return res.status(500).json({ message: "Erro ao atualizar cliente" });
+    }
+    res.json(results);
+  });
+  res.redirect("/clientes");
+})
 module.exports = router;
