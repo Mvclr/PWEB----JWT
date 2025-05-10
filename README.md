@@ -1,4 +1,10 @@
-Projeto de autenticação e autorização utilizando JWT para autenticação básica de login e autorição de entrada nas páginas de adicionar clientes e na página principal. Tokens gerados com JWT e armazenados em cookies.
+Sistema de controle sob clientes e produtos.
+enpoints de acesso =
+/login
+/cadastro
+/principal ou /
+/clientes
+/produtos
 
 Bibliotecas baixadas: express, nodemon, cookie-parser, jsonwebtoken, dotenv-safe e bcrypt
 
