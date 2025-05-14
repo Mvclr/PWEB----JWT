@@ -24,19 +24,20 @@ router.post("/login", async (req, res) => {
           console.error("Error checking user:", error);
           reject(res.status(500).json({ message: "Erro ao verificar usuário" }));
         } else {
-          resolve(results[0]); // Return the first user object if found
+          resolve(results[0]); 
         }
       }
     );
   });
 
   if (!foundUser) {
-    return res.status(401).json({ message: "Usuário não encontrado" });
+    return message = "Usuário ou senha incorretos";
+    console.log("Senha ou usuário incorreto");
   }
 
   const passwordMatch = await bcrypt.compare(password, foundUser.password);
   if (!passwordMatch) {
-    return res.status(401).json({ message: "Senha incorreta" });
+    console.log("Senha ou usuário incorreto");
   }
 
   const token = jwt.sign({ user: foundUser.username }, jwtAuth.getSecretKey(), {
