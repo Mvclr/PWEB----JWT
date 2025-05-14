@@ -1,72 +1,105 @@
-import Product from "../classes/Product.js";
+class Product {
+  constructor(name, id) {
+    this.name = name;
+    this.id = id;
+  }
+}
 
-let produtos = [];
-let editandoIndex = null;
+let products = [];
+
+async function fetchProducts() {
+  try {
+    const response = await fetch("/api/produtosTable");
+    if (!response.ok) {
+      throw new Error("Falha ao buscar produto");
+    }
+    const data = await response.json();
+    products = data.map((product) => new Product(product.name, product.id));
+  } catch (error) {
+    console.error("Erro ao buscar produto:", error);
+  }
+}
 
 function renderTabela() {
-  const tbody = document.querySelector("#tabela tbody");
-  tbody.innerHTML = "";
-  produtos.forEach((produto, index) => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${produtos[index].name}</td>
-      <td>${produtos[index].id}</td>
-      <td>
-        <button class="edit-button">✏️</button>
-        <button class="delete-button">🗑️</button>
-      </td>
-    `;
-    tbody.appendChild(tr);
+ fetchProducts()
+    .then(() => {
+      const tbody = document.querySelector("#tabela tbody");
+      tbody.innerHTML = "";
+      console.log(products);
+      products.forEach((product, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${product.name}</td>
+          <td>${product.id}</td>
+          <td>
+            
+            <button class="delete-button">🗑️</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+        
+        //<button class="edit-button">✏️</button>
+        //const editButton = tr.querySelector(".edit-button");
+        //editButton.addEventListener("click", () => editarproducte(producte.id));
 
-    const editButton = tr.querySelector(".edit-button");
-    editButton.addEventListener("click", () => {
-      editarProduto(index);
+        const deleteButton = tr.querySelector(".delete-button");
+        deleteButton.addEventListener("click", () => deletarProduto(product.id));
+      });
+    })
+    .catch((error) => {
+      console.error("Error rendering table:", error);
     });
-    const deleteButton = tr.querySelector(".delete-button");
-    deleteButton.addEventListener("click", () => {
-      deletarProduto(index);
-    });
-  });
+  
 }
 
- function adicionarProdutos() {
-  const nomeInput = document.getElementById("nome");
-  const idInput = document.getElementById("id");
-  const name = nomeInput.value.trim();
-  const id = idInput.value.trim();
-  if (!name || !id) return;
+async function adicionarProduto() {
+  const nomeInput = document.querySelector(".nome");
+  const nome = nomeInput.value.trim();
+  if (!nome) return;
 
-  const newProduct = new Product(name, id);
-  if (editandoIndex !== null) {
-    produtos[editandoIndex] = newProduct;
-    editandoIndex = null;
-  } else {
-    produtos.push(newProduct);
+  try {
+    const response = await fetch("/produto", {
+      method: "POST",
+    });
+
+    if (!response.ok) {
+      throw new Error("Falha em adicionar produto");
+    }
+
+  } catch (error) {
+    console.error("Falha em adicionar produto:", error);
   }
-  nomeInput.value = "";
-  idInput.value = "";
-  renderTabela();
 }
 
-function deletarProduto(index) {
-  produtos.splice(index, 1);
-  renderTabela();
+async function deletarProduto(id) {
+  try {
+    const response = await fetch(`/produto/${id}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("Falha ao deletar produto");
+    }
+    products = products.filter((product) => product.id !== id);
+     fetchProducts()
+        .then(() => {
+          renderTabela();
+        })
+        .catch((error) => {
+          console.error("Erro na geração da tabela:", error);
+        });
+  } catch (error) {
+    console.error("Erro ao delatar produto:", error);
+  }
 }
 
-function editarProduto(index) {
-  document.getElementById("nome").value = produtos[index].name;
-  document.getElementById("id").value = produtos[index].id;
-  editandoIndex = index;
+async function editarproducte(id) {
+  
 }
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
-  const tabela = document.querySelector("#tabela");
-  if (tabela) renderTabela();
-
-  const addButton = document.querySelector("#add-button");
-if (addButton) {
-  addButton.addEventListener("click", adicionarProdutos);
-}
+  renderTabela()
 });
 
-export default {produtos};
+export { products };
